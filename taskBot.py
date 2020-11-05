@@ -1,7 +1,14 @@
+# Matis Krisztian Telegram chatbot task
+# @MKtaskbot
+
+
 from telegram.ext import MessageHandler, Filters, CommandHandler, Updater, ConversationHandler
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 import logging
 import csv
+
+import os
+PORT = int(os.environ.get('PORT', 5000))
 
 TOKEN = "1089104157:AAGangZbH9Y7OcyPfi2-lQ5MtsB-x3DnskQ"
 
@@ -135,7 +142,10 @@ def main():
     unk = MessageHandler(Filters.command, unknown)
     dp.add_handler(unk)
 
-    updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=TOKEN)
+    updater.bot.setWebhook('https://mk-task-bot.herokuapp.com/' + TOKEN)
 
     updater.idle()
 
